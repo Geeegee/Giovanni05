@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LG Express</title>
+  <link rel="stylesheet" href="styles.css">
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+  />
+
+</head>
+<body>
+  <div class="container">
+
+    <h2>Pedido de Entrega</h2>
+    <form id="formEntrega">
+
+      <label for="tamanho">Tamanho da Encomenda:</label>
+      <select id="tamanho" name="tamanho" required>
+        <option value=""> Selecione </option>
+        <option value="pequeno">Pequeno</option>
+        <option value="medio">Médio</option>
+        <option value="grande">Grande</option>
+      </select>
+
+      <label for="fragil">É frágil?</label>
+      <select id="fragil" name="fragil" required>
+        <option value="">Selecione</option>
+        <option value="sim">Sim</option>
+        <option value="nao">Não</option>
+      </select>
+
+      <label for="tipo">Tipo de Entrega:</label>
+      <select id="tipo" name="tipo" required>
+        <option value=""> Selecione </option>
+        <option value="documento">Documento</option>
+        <option value="retirada">Retirada</option>
+      </select>
+
+      <label for="origem">Endereço de origem:</label>
+<input type="text" id="origem" name="origem" required>
+
+<label for="destino">Endereço de destino:</label>
+<input type="text" id="destino" name="destino" required>
+
+<button type="button" onclick="calcularRota()">Calcular Rota</button>
+
+<div id="mapa" style="height: 300px; margin-top: 20px;">
+
+</div>
+       
+<a href="https://www.instagram.com/lenilson1196?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" class="instagram-button">
+    <i class="fab fa-instagram"></i> Siga no Instagram
+  </a>
+
+      <button type="submit">Enviar Pedido</button>
+    </form>
+  </div>
+
+  <script>
+    document.getElementById('formEntrega').addEventListener('submit', function(event) {
+      const tamanho = document.getElementById('tamanho').value;
+      const fragil = document.getElementById('fragil').value;
+      const tipo = document.getElementById('tipo').value;
+
+      if (!tamanho || !fragil || !tipo) {
+        alert('Por favor, preencha todos os campos.');
+        event.preventDefault();
+      } else {
+        alert('Pedido enviado com sucesso!');
+      }
+    });
+  </script>
+<script>
+  let map;
+  let directionsService;
+  let directionsRenderer;
+
+  function initMap() {
+    map = new google.maps.Map(document.getElementById("mapa"), {
+      center: { lat: -23.55052, lng: -46.633308 }, // São Paulo
+      zoom: 13,
+    });
+
+    directionsService = new google.maps.DirectionsService();
+    directionsRenderer = new google.maps.DirectionsRenderer();
+    directionsRenderer.setMap(map);
+  }
+
+  function calcularRota() {
+    const origem = document.getElementById("origem").value;
+    const destino = document.getElementById("destino").value;
+
+    if (!origem || !destino) {
+      alert("Preencha os campos de origem e destino.");
+      return;
+    }
+
+    const rota = {
+      origin: origem,
+      destination: destino,
+      travelMode: google.maps.TravelMode.DRIVING,
+    };
+
+    directionsService.route(rota, function (response, status) {
+      if (status === "OK") {
+        directionsRenderer.setDirections(response);
+      } else {
+        alert("Não foi possível calcular a rota: " + status);
+      }
+    });
+  }
+</script>  
+
+</body>
+</html>
